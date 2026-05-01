@@ -1,0 +1,62 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/bash-guard.sh" },
+          { "type": "command", "command": ".claude/hooks/no-force-push.sh" },
+          { "type": "command", "command": ".claude/hooks/no-tmp-source.sh" }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/refuse-secret-files.sh" }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/protect-skills-dir.sh" },
+          { "type": "command", "command": ".claude/hooks/no-node-modules-write.sh" },
+          { "type": "command", "command": ".claude/hooks/env-edit-guard.sh" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/read-redact.sh" }
+        ]
+      },
+      {
+        "matcher": ".*",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/secret-scrub.sh" }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/post-build-nudge.sh" }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/session-start-check.sh" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/completion-gate.sh" }
+        ]
+      }
+    ]
+  }
+}
